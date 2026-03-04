@@ -4,6 +4,7 @@ import com.stcakyforge.matchpoint.dtos.request.SenhaRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.UsuarioRequestDto;
 import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
 import com.stcakyforge.matchpoint.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioRequestDto usuarioRequestDto) {
+    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody @Valid UsuarioRequestDto usuarioRequestDto) {
         return usuarioService.salvarUsuario(usuarioRequestDto);
     }
 
@@ -35,13 +36,13 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}/edit/password")
-    public ResponseEntity<Void> atualizarSenhaUsuario(@PathVariable Long id, @RequestBody SenhaRequestDto novaSenha) {
+    public ResponseEntity<Void> atualizarSenhaUsuario(@PathVariable Long id, @RequestBody @Valid SenhaRequestDto novaSenha) {
         usuarioService.atualizarSenha(id, novaSenha);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}/edit")
-    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto usuarioRequestDto) {
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody @Valid UsuarioRequestDto usuarioRequestDto) {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuarioRequestDto));
     }
 

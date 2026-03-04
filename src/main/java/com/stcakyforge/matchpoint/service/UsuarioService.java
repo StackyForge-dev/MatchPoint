@@ -1,5 +1,6 @@
 package com.stcakyforge.matchpoint.service;
 
+import com.stcakyforge.matchpoint.config.PasswordConfig;
 import com.stcakyforge.matchpoint.dtos.request.SenhaRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.UsuarioRequestDto;
 import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
@@ -8,6 +9,7 @@ import com.stcakyforge.matchpoint.model.Usuario;
 import com.stcakyforge.matchpoint.repository.UsuarioRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,10 +24,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper mapper;
+    private final  PasswordConfig passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper mapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper mapper, PasswordConfig passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseEntity<UsuarioResponseDto> salvarUsuario(UsuarioRequestDto requestDto){
@@ -33,7 +37,14 @@ public class UsuarioService {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        return ResponseEntity.ok(mapper.toDto(usuarioRepository.save(mapper.toEntity(requestDto))));
+        String passwordEnc = passwordEncoder.passwordEncoder().encode(requestDto.senha());
+
+        UsuarioRequestDto user = new UsuarioRequestDto(
+                requestDto.username(),
+                requestDto.email(),
+                passwordEnc
+        );
+        return ResponseEntity.ok(mapper.toDto(usuarioRepository.save(mapper.toEntity(user))));
     }
 
     public List<UsuarioResponseDto> listaUsuarios(){
