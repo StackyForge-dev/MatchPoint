@@ -1,6 +1,7 @@
 package com.stcakyforge.matchpoint.service;
 
 import com.stcakyforge.matchpoint.config.PasswordConfig;
+import com.stcakyforge.matchpoint.dtos.request.EmailRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.SenhaRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.UsuarioRequestDto;
 import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
@@ -61,13 +62,12 @@ public class UsuarioService {
 
     public UsuarioResponseDto atualizarUsuario(Long id, UsuarioRequestDto usuario){
 
-        Usuario newUsuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
+        Usuario oldUsuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
-        newUsuario.setId(id);
-        newUsuario.setUsername(!Objects.equals(usuario.username(), newUsuario.getUsername()) ? usuario.username() : newUsuario.getUsername());
-        newUsuario.setEmail(!Objects.equals(usuario.email(), newUsuario.getEmail()) ? usuario.email() : newUsuario.getEmail());
+        oldUsuario.setId(id);
+        oldUsuario.setUsername(!Objects.equals(usuario.username(), oldUsuario.getUsername()) ? usuario.username() : oldUsuario.getUsername());
 
-        return mapper.toDto(usuarioRepository.save(newUsuario));
+        return mapper.toDto(usuarioRepository.save(oldUsuario));
     }
 
     public void atualizarSenha(Long id, SenhaRequestDto novaSenha){
@@ -75,6 +75,14 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
         usuario.setSenha(novaSenha.novaSenha());
+        usuarioRepository.save(usuario);
+    }
+
+    public void atualizarEmail(Long id, EmailRequestDto novoEmail){
+
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
+
+        usuario.setEmail(novoEmail.novoEmail());
         usuarioRepository.save(usuario);
     }
 }
