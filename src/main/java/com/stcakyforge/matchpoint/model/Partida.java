@@ -10,8 +10,6 @@ public class Partida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String time;
-
     @ManyToOne
     @JoinColumn(name = "jogador_1_id")
     private Jogador jogador1;
@@ -28,12 +26,15 @@ public class Partida {
 
     private int cartaoAmareloJogador2;
 
+    @ManyToOne
+    @JoinColumn(name = "campeonato_id")
+    private Campeonato campeonato;
+
     public Partida() {
     }
 
-    public Partida(Long id, String time, Jogador jogador1, Jogador jogador2, int golsJogador1, int golsJogador2, int cartaoAmareloJogador1, int cartaoAmareloJogador2) {
+    public Partida(Long id, Jogador jogador1, Jogador jogador2, int golsJogador1, int golsJogador2, int cartaoAmareloJogador1, int cartaoAmareloJogador2) {
         this.id = id;
-        this.time = time;
         this.jogador1 = jogador1;
         this.jogador2 = jogador2;
         this.golsJogador1 = golsJogador1;
@@ -48,14 +49,6 @@ public class Partida {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public Jogador getJogador1() {

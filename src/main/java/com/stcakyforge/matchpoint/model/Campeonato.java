@@ -18,17 +18,21 @@ public class Campeonato {
     private int qtdPartidas;
 
     @OneToMany(mappedBy = "campeonato")
+    private List<Partida> partidas;
+
+    @OneToMany(mappedBy = "campeonato")
     private List<Jogador> jogadores;
 
     public Campeonato() {
     }
 
-    public Campeonato(Long id, String campNome, int qtdJogadores, int qtdPartidas, List<Jogador> jogadores) {
+    public Campeonato(Long id, String campNome, int qtdJogadores, int qtdPartidas, List<Jogador> jogadores, List<Partida> partidas) {
         this.id = id;
         this.campNome = campNome;
         this.qtdJogadores = qtdJogadores;
         this.qtdPartidas = qtdPartidas;
         this.jogadores = jogadores;
+        this.partidas = partidas;
     }
 
     public Long getId() {
@@ -69,5 +73,13 @@ public class Campeonato {
 
     public void setJogadores(List<Jogador> jogadores) {
         this.jogadores = jogadores;
+    }
+
+    public List<Partida> getPartidas() {
+        return partidas;
+    }
+
+    public void setPartidas(List<Partida> partidas) {
+        this.partidas = partidas;
     }
 }
