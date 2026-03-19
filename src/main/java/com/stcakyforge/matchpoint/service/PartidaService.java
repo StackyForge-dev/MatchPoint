@@ -8,7 +8,6 @@ import com.stcakyforge.matchpoint.model.Partida;
 import com.stcakyforge.matchpoint.repository.JogadorRepository;
 import com.stcakyforge.matchpoint.repository.PartidaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,29 +24,25 @@ public class PartidaService {
         this.jogadorRepository = jogadorRepository;
     }
 
-    public ResponseEntity<PartidaResponseDto> criarPartida(Long idJogador1, Long idJogador2) {
+    public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) {
         Partida newPartida = new Partida();
 
         newPartida.setJogador1(jogadorRepository.findById(idJogador1).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
         newPartida.setJogador1(jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
 
-        return ResponseEntity.ok(partidaMapper.toDto(partidaRepository.save(newPartida)));
+        return partidaMapper.toDto(partidaRepository.save(newPartida));
     }
 
-    public ResponseEntity<PartidaResponseDto> pegarPartidaPorId(Long id) {
-        return ResponseEntity.ok(partidaMapper.toDto(partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"))));
+    public PartidaResponseDto pegarPartidaPorId(Long id) {
+        return partidaMapper.toDto(partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
     }
 
-    public ResponseEntity<Void> deletarPartida(Long id) {
-        if(partidaRepository.existsById(id)) {
-            partidaRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void deletarPartida(Long id) {
+        partidaRepository.deleteById(id);
     }
 
-    public ResponseEntity<PartidaResponseDto> placarGols(Long idPartida, int golsJogador1, int golsJogador2) {
-        Partida partida = partidaRepository.findById(idPartida).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
+    public PartidaResponseDto placarGols(Long id, int golsJogador1, int golsJogador2) {
+        Partida partida = partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
 
         partida.setGolsJogador1(golsJogador1);
         partida.setGolsJogador2(golsJogador2);
@@ -64,15 +59,19 @@ public class PartidaService {
         jogadorRepository.save(jogador1);
         jogadorRepository.save(jogador2);
 
-        return ResponseEntity.ok(partidaMapper.toDto(partidaRepository.save(partida)));
+        return partidaMapper.toDto(partidaRepository.save(partida));
     }
 
-    public ResponseEntity<PartidaResponseDto> placarCartoesAmarelos(Long idPartida, int cartoesJogador1, int cartoesJogador2) {
-        Partida partida = partidaRepository.findById(idPartida).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
+    public PartidaResponseDto placarCartoesAmarelos(Long id, int cartoesJogador1, int cartoesJogador2) {
+        Partida partida = partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
 
         partida.setCartaoAmareloJogador1(cartoesJogador1);
         partida.setCartaoAmareloJogador2(cartoesJogador2);
 
-        return ResponseEntity.ok(partidaMapper.toDto(partidaRepository.save(partida)));
+        return partidaMapper.toDto(partidaRepository.save(partida));
+    }
+
+    public Boolean partidaExistePorId(Long id) {
+        return partidaRepository.existsById(id);
     }
 }
