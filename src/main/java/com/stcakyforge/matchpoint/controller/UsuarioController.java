@@ -34,10 +34,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.pegarUsuarioPorId(id));
     }
 
-    @PutMapping("/{id}/edit")
-    public ResponseEntity<Void> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto usuarioRequestDto) {
-        usuarioService.atualizarUsuario(id, usuarioRequestDto);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}/edit/username")
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto usuarioRequestDto) {
+        return ResponseEntity.ok(usuarioService.atualizarUsernameUsuario(id, usuarioRequestDto));
     }
 
     @PutMapping("/{id}/edit/password")

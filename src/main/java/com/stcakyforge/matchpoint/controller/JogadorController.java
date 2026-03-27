@@ -34,12 +34,12 @@ public class JogadorController {
         return ResponseEntity.ok(jogadorService.pegarJogadorPorId(id));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/score/{id}")
     public ResponseEntity<Integer> saldoGols(@PathVariable Long id) {
         return ResponseEntity.ok(jogadorService.saldoGols(id));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/champ/{id}")
     public ResponseEntity<List<JogadorResponseDto>> pegarJogadoresPorCampeopnato(@PathVariable Long id) throws Throwable {
         return ResponseEntity.ok(jogadorService.pegarJogadoresPorCampeopnato(id));
     }

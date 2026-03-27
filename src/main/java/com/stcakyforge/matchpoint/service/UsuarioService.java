@@ -56,7 +56,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public UsuarioResponseDto atualizarUsuario(Long id, UsuarioRequestDto usuario){
+    public UsuarioResponseDto atualizarUsernameUsuario(Long id, UsuarioRequestDto usuario){
 
         Usuario oldUsuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
@@ -70,7 +70,9 @@ public class UsuarioService {
 
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
-        usuario.setSenha(novaSenha.novaSenha());
+        String passwordEnc = passwordEncoder.passwordEncoder().encode(novaSenha.novaSenha());
+
+        usuario.setSenha(passwordEnc);
         usuarioRepository.save(usuario);
     }
 
