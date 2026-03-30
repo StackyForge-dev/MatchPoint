@@ -2,13 +2,18 @@ package com.stcakyforge.matchpoint.service;
 
 
 import com.stcakyforge.matchpoint.dtos.response.PartidaResponseDto;
+import com.stcakyforge.matchpoint.dtos.response.PegarPartidasDto;
 import com.stcakyforge.matchpoint.mapper.PartidaMapper;
+import com.stcakyforge.matchpoint.mapper.PegarPartidasMapper;
 import com.stcakyforge.matchpoint.model.Jogador;
 import com.stcakyforge.matchpoint.model.Partida;
+import com.stcakyforge.matchpoint.repository.CampeonatoRepository;
 import com.stcakyforge.matchpoint.repository.JogadorRepository;
 import com.stcakyforge.matchpoint.repository.PartidaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PartidaService {
@@ -16,12 +21,16 @@ public class PartidaService {
 
     private final PartidaRepository partidaRepository;
     private final JogadorRepository jogadorRepository;
+    private final CampeonatoRepository campeonatoRepository;
     private final PartidaMapper partidaMapper;
+    private final PegarPartidasMapper pegarpPartidaMapper;
 
-    public PartidaService(PartidaRepository partidaRepository, PartidaMapper partidaMapper, JogadorRepository jogadorRepository) {
+    public PartidaService(PartidaRepository partidaRepository, PartidaMapper partidaMapper, CampeonatoRepository campeonatoRepository, JogadorRepository jogadorRepository, PegarPartidasMapper pegarpPartidaMapper) {
         this.partidaRepository = partidaRepository;
         this.partidaMapper = partidaMapper;
+        this.campeonatoRepository = campeonatoRepository;
         this.jogadorRepository = jogadorRepository;
+        this.pegarpPartidaMapper = pegarpPartidaMapper;
     }
 
     public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) {
@@ -35,6 +44,15 @@ public class PartidaService {
 
     public PartidaResponseDto pegarPartidaPorId(Long id) {
         return partidaMapper.toDto(partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
+    }
+
+    public List<PegarPartidasDto> pegarPartidasPorCampeonatos () {
+
+        List<Partida> ranking = campeonatoRepository.findAll()
+                .stream().flatMap(p -> p.getPartidas().stream().sorted())
+                .toList();
+
+        return pegarpPartidaMapper.toDto(ranking);
     }
 
     public void deletarPartida(Long id) {

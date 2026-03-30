@@ -21,8 +21,8 @@ public class CampeonatoController {
     }
 
     @PostMapping
-    public ResponseEntity<CampeonatoResponseDto> criarCampeonato(CampeonatoRequestDto campeonatoRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(campeonatoService.criarCampeonato(campeonatoRequestDto));
+    public ResponseEntity<CampeonatoResponseDto> criarCampeonato(@RequestBody CampeonatoRequestDto campeonatoRequestDto) {
+        return ResponseEntity.ok(campeonatoService.criarCampeonato(campeonatoRequestDto));
     }
 
     @GetMapping

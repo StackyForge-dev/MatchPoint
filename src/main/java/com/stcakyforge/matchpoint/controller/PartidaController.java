@@ -1,10 +1,13 @@
 package com.stcakyforge.matchpoint.controller;
 
 import com.stcakyforge.matchpoint.dtos.response.PartidaResponseDto;
+import com.stcakyforge.matchpoint.dtos.response.PegarPartidasDto;
 import com.stcakyforge.matchpoint.service.PartidaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/plays")
@@ -19,6 +22,11 @@ public class PartidaController {
     @PostMapping
     public ResponseEntity<PartidaResponseDto> criarPartida (@RequestBody Long idJogador1, @RequestBody Long idJogador2) {
         return ResponseEntity.status(HttpStatus.CREATED).body(partidaService.criarPartida(idJogador1, idJogador2));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PegarPartidasDto>> pegarPartidasDto () {
+        return ResponseEntity.ok(partidaService.pegarPartidasPorCampeonatos());
     }
 
     @GetMapping("/{id}")

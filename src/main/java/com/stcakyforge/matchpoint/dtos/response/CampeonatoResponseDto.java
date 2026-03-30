@@ -3,13 +3,14 @@ package com.stcakyforge.matchpoint.dtos.response;
 import com.stcakyforge.matchpoint.enums.CampTypes;
 import com.stcakyforge.matchpoint.model.Jogador;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public record CampeonatoResponseDto(
+        Long id,
         String nomeCampeonato,
         List<Jogador> jogadores,
-        LocalDateTime dataInicio,
-        LocalDateTime dataFim,
+        LocalDate dataInicio,
+        LocalDate dataFim,
         CampTypes estiloPontuacao
 ) {}

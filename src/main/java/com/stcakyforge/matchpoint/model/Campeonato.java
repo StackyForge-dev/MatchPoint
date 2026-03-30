@@ -3,7 +3,10 @@ package com.stcakyforge.matchpoint.model;
 import com.stcakyforge.matchpoint.enums.CampTypes;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "campeonato")
@@ -12,12 +15,17 @@ public class Campeonato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String campNome;
+    private String nomeCampeonato;
 
     private int qtdJogadores;
 
     private int qtdPartidas;
 
+    private LocalDate dataInicio;
+
+    private LocalDate dataFim;
+
+    @Enumerated(value = STRING)
     private CampTypes estiloPontuacao;
 
     @OneToMany(mappedBy = "campeonato")
@@ -29,14 +37,16 @@ public class Campeonato {
     public Campeonato() {
     }
 
-    public Campeonato(Long id, String campNome, int qtdJogadores, int qtdPartidas, CampTypes estiloPontuacao, List<Jogador> jogadores, List<Partida> partidas) {
+    public Campeonato(Long id, String nomeCampeonato, int qtdJogadores, int qtdPartidas, LocalDate dataInicio, LocalDate dataFim, CampTypes estiloPontuacao, List<Jogador> jogadores, List<Partida> partidas) {
         this.id = id;
-        this.campNome = campNome;
+        this.nomeCampeonato = nomeCampeonato;
         this.qtdJogadores = qtdJogadores;
         this.qtdPartidas = qtdPartidas;
-        this.jogadores = jogadores;
-        this.partidas = partidas;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
         this.estiloPontuacao = estiloPontuacao;
+        this.partidas = partidas;
+        this.jogadores = jogadores;
     }
 
     public Long getId() {
@@ -47,12 +57,12 @@ public class Campeonato {
         this.id = id;
     }
 
-    public String getCampNome() {
-        return campNome;
+    public String getNomeCampeonato() {
+        return nomeCampeonato;
     }
 
-    public void setCampNome(String campNome) {
-        this.campNome = campNome;
+    public void setNomeCampeonato(String nomeCampeonato) {
+        this.nomeCampeonato = nomeCampeonato;
     }
 
     public int getQtdJogadores() {
@@ -69,6 +79,22 @@ public class Campeonato {
 
     public void setQtdPartidas(int qtdPartidas) {
         this.qtdPartidas = qtdPartidas;
+    }
+
+    public LocalDate getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public LocalDate getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
     }
 
     public CampTypes getEstiloPontuacao() {
