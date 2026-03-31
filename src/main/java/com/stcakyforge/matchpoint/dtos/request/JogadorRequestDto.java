@@ -1,5 +1,6 @@
 package com.stcakyforge.matchpoint.dtos.request;
 
+import com.stcakyforge.matchpoint.model.Campeonato;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ public record JogadorRequestDto(
         @NotEmpty(message = "O nome do jogador não pode ser vazio")
         @NotBlank(message = "O nome do jogador não pode estar em branco")
         @NotNull(message = "O nome do jogador não pode ser nulo")
-        String name,
+        String nome,
 
         @NotEmpty(message = "O nome do time não pode ser branco")
         @NotBlank(message = "O nome do time não pode estar em branco")
@@ -19,5 +20,5 @@ public record JogadorRequestDto(
         @NotEmpty(message = "O id do campeonato não pode ser branco")
         @NotBlank(message = "O id do campeonato não pode estar em branco")
         @NotNull(message = "O id do campeonato não pode ser nulo")
-        Long Idcampeonato
+        Long idCampeonato
 ) {}

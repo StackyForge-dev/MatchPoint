@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;

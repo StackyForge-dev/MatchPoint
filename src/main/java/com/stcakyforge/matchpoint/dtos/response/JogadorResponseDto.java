@@ -28,7 +28,7 @@ public record JogadorResponseDto(
 
         String time,
 
-        Campeonato campeonato,
+        Long idCampeonato,
 
         List<Partida> partidasComoJogador1,
 

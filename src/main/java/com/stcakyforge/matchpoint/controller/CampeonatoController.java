@@ -4,7 +4,6 @@ import com.stcakyforge.matchpoint.dtos.request.CampeonatoRequestDto;
 import com.stcakyforge.matchpoint.dtos.response.CampeonatoResponseDto;
 import com.stcakyforge.matchpoint.dtos.response.JogadorResponseDto;
 import com.stcakyforge.matchpoint.service.CampeonatoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

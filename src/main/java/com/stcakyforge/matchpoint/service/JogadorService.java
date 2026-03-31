@@ -26,7 +26,17 @@ public class JogadorService {
     }
 
     public JogadorResponseDto criarJogador(JogadorRequestDto request) {
-        return mapper.toDto(jogadorRepository.save(mapper.toEntity(request)));
+        Jogador player = new Jogador();
+
+        Campeonato camp = campeonatoRepository.findById(request.idCampeonato()).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!"));
+                player.setNome(request.nome());
+                player.setTime(request.time());
+                player.setCampeonato(camp);
+
+        camp.getJogadores().add(player);
+
+        campeonatoRepository.save(camp);
+        return mapper.toDto(jogadorRepository.save(player));
     }
 
     public List<JogadorResponseDto> pegarTodosJogadores() {

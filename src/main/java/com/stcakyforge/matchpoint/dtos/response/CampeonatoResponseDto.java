@@ -9,7 +9,8 @@ import java.util.List;
 public record CampeonatoResponseDto(
         Long id,
         String nomeCampeonato,
-        List<Jogador> jogadores,
+        List<Long> idsJogadores,
+        int totalJogadores,
         LocalDate dataInicio,
         LocalDate dataFim,
         CampTypes estiloPontuacao

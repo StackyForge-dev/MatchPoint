@@ -37,7 +37,7 @@ public class PartidaService {
         Partida newPartida = new Partida();
 
         newPartida.setJogador1(jogadorRepository.findById(idJogador1).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
-        newPartida.setJogador1(jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
+        newPartida.setJogador2(jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
 
         return partidaMapper.toDto(partidaRepository.save(newPartida));
     }
