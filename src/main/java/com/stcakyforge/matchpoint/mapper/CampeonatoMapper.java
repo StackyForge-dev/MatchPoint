@@ -14,14 +14,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface CampeonatoMapper {
 
-    @Mapping(source = "jogadores", target = "totalJogadores", qualifiedByName = "countJogadores")
-    @Mapping(source = "jogadores", target = "idsJogadores", qualifiedByName = "extractJogadorIds")
-    CampeonatoResponseDto toDto(Campeonato campeonato);
-
-    List<CampeonatoResponseDto> toDto (List<Campeonato> campeonatos);
-
-    Campeonato toEntity(CampeonatoRequestDto campeonatoRequest);
-
     @Named("countJogadores")
     default int countJogadores(List<Jogador> jogadores) {
         return jogadores != null ? jogadores.size() : 0;
@@ -36,4 +28,13 @@ public interface CampeonatoMapper {
                 .map(Jogador::getId)
                 .collect(Collectors.toList());
     }
+
+    @Mapping(source = "jogadores", target = "totalJogadores", qualifiedByName = "countJogadores")
+    @Mapping(source = "jogadores", target = "idsJogadores", qualifiedByName = "extractJogadorIds")
+    CampeonatoResponseDto toDto(Campeonato campeonato);
+
+    List<CampeonatoResponseDto> toDto (List<Campeonato> campeonatos);
+
+    Campeonato toEntity(CampeonatoRequestDto campeonatoRequest);
+
 }

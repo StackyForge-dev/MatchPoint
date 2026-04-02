@@ -13,6 +13,7 @@ import com.stcakyforge.matchpoint.repository.PartidaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -23,21 +24,32 @@ public class PartidaService {
     private final JogadorRepository jogadorRepository;
     private final CampeonatoRepository campeonatoRepository;
     private final PartidaMapper partidaMapper;
-    private final PegarPartidasMapper pegarpPartidaMapper;
+    private final PegarPartidasMapper pegarPartidaMapper;
 
-    public PartidaService(PartidaRepository partidaRepository, PartidaMapper partidaMapper, CampeonatoRepository campeonatoRepository, JogadorRepository jogadorRepository, PegarPartidasMapper pegarpPartidaMapper) {
+    public PartidaService(PartidaRepository partidaRepository, PartidaMapper partidaMapper, CampeonatoRepository campeonatoRepository, JogadorRepository jogadorRepository, PegarPartidasMapper pegarPartidaMapper) {
         this.partidaRepository = partidaRepository;
         this.partidaMapper = partidaMapper;
         this.campeonatoRepository = campeonatoRepository;
         this.jogadorRepository = jogadorRepository;
-        this.pegarpPartidaMapper = pegarpPartidaMapper;
+        this.pegarPartidaMapper = pegarPartidaMapper;
     }
 
-    public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) {
+    public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) throws AccessDeniedException {
         Partida newPartida = new Partida();
+        Jogador player1 = jogadorRepository.findById(idJogador1).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"));
+        Jogador player2 = jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"));
 
-        newPartida.setJogador1(jogadorRepository.findById(idJogador1).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
-        newPartida.setJogador2(jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
+        if (!player1.getCampeonato().getId().equals(player2.getCampeonato().getId())) {
+
+            throw new AccessDeniedException("Não é possível criar partida de jogadores de campeonatos diferentes!");
+        }
+            newPartida.setJogador1(player1);
+            newPartida.setJogador2(player2);
+
+            player1.setPartidasTotais(player1.getPartidasTotais() + 1);
+            player2.setPartidasTotais(player2.getPartidasTotais() + 1);
+
+            newPartida.setCampeonato(campeonatoRepository.findById(player1.getCampeonato().getId()).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado")));
 
         return partidaMapper.toDto(partidaRepository.save(newPartida));
     }
@@ -52,7 +64,7 @@ public class PartidaService {
                 .stream().flatMap(p -> p.getPartidas().stream().sorted())
                 .toList();
 
-        return pegarpPartidaMapper.toDto(ranking);
+        return pegarPartidaMapper.toDto(ranking);
     }
 
     public void deletarPartida(Long id) {

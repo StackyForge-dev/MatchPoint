@@ -36,18 +36,19 @@ public class Jogador {
     @JoinColumn(name = "campeonato_id")
     private Campeonato campeonato;
 
-    @OneToMany(mappedBy = "jogador1")
-    private List<Partida> partidasComoJogador1;
+    private Long partidasComoJogador1;
 
-    @OneToMany(mappedBy = "jogador2")
-    private List<Partida> partidasComoJogador2;
+    private Long partidasComoJogador2;
+
+    @OneToMany
+    private List<Partida> partidas;
 
     private int partidasTotais;
 
     public Jogador() {
     }
 
-    public Jogador(Long id, String nome, int pontos, int partidasJogadas, int vitorias, int empate, int derrota, int golsMarcados, int golsSofridos, int saldoGols, List<Partida> partidasComoJogador1, List<Partida> partidasComoJogador2, int partidasTotais, String time, Campeonato campeonato) {
+    public Jogador(Long id, String nome, int pontos, int partidasJogadas, int vitorias, int empate, int derrota, int golsMarcados, int golsSofridos, int saldoGols, Long partidasComoJogador1, Long partidasComoJogador2, int partidasTotais, String time, Campeonato campeonato, List<Partida> partidas) {
         this.id = id;
         this.nome = nome;
         this.pontos = pontos;
@@ -63,6 +64,7 @@ public class Jogador {
         this.partidasTotais = partidasTotais;
         this.time = time;
         this.campeonato = campeonato;
+        this.partidas = partidas;
     }
 
     public Long getId() {
@@ -145,19 +147,19 @@ public class Jogador {
         this.saldoGols = saldoGols;
     }
 
-    public List<Partida> getPartidasComoJogador1() {
+    public Long getPartidasComoJogador1() {
         return partidasComoJogador1;
     }
 
-    public void setPartidasComoJogador1(List<Partida> partidasComoJogador1) {
+    public void setPartidasComoJogador1(Long partidasComoJogador1) {
         this.partidasComoJogador1 = partidasComoJogador1;
     }
 
-    public List<Partida> getPartidasComoJogador2() {
+    public Long getPartidasComoJogador2() {
         return partidasComoJogador2;
     }
 
-    public void setPartidasComoJogador2(List<Partida> partidasComoJogador2) {
+    public void setPartidasComoJogador2(Long partidasComoJogador2) {
         this.partidasComoJogador2 = partidasComoJogador2;
     }
 
@@ -183,5 +185,13 @@ public class Jogador {
 
     public void setCampeonato(Campeonato campeonato) {
         this.campeonato = campeonato;
+    }
+
+    public List<Partida> getPartidas() {
+        return partidas;
+    }
+
+    public void setPartidas(List<Partida> partidas) {
+        this.partidas = partidas;
     }
 }
