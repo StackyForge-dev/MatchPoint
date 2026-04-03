@@ -98,4 +98,12 @@ public class Partida {
     public void setCartaoAmareloJogador2(int cartaoAmareloJogador2) {
         this.cartaoAmareloJogador2 = cartaoAmareloJogador2;
     }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
 }

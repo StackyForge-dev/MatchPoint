@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.stcakyforge.matchpoint.model.Partida;
 
+import java.util.List;
+
 @Repository
 public interface PartidaRepository extends JpaRepository<Partida, Long> {
+    List<Partida> findByCampeonatoId(Long campeonato_id);
 }
