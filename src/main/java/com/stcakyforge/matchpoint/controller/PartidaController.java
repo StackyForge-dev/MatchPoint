@@ -55,15 +55,20 @@ public class PartidaController {
     }
 
     @PostMapping("/score/{id}")
-    public ResponseEntity<PartidaResponseDto> placarGols(@PathVariable Long id, @RequestBody int golsJogador1, int golsJogador2) {
-        return ResponseEntity.ok(partidaService.placarGols(id, golsJogador1, golsJogador2));
+    public ResponseEntity<PartidaResponseDto> placarGols(@PathVariable Long id, @RequestBody PartidaRequestDto request) {
+        return ResponseEntity.ok(partidaService.fazerGol(
+                id,
+                request.golsJogador1(),
+                request.golsJogador2())
+        );
     }
 
     @PostMapping("/score/{id}/cards")
-    public ResponseEntity<PartidaResponseDto> placarCartoesAmarelos(@PathVariable Long id, int cartoesJogador1, int cartoesJogador2) {
-        return ResponseEntity.ok(partidaService.placarCartoesAmarelos(id, cartoesJogador1, cartoesJogador2));
+    public ResponseEntity<PartidaResponseDto> placarCartoesAmarelos(@PathVariable Long id, @RequestBody PartidaRequestDto request) {
+        return ResponseEntity.ok(partidaService.placarCartoesAmarelos(
+                id,
+                request.cartaoAmareloJogador1(),
+                request.cartaoAmareloJogador2())
+        );
     }
-
-
-
 }

@@ -3,10 +3,12 @@ import com.stcakyforge.matchpoint.dtos.request.UsuarioRequestDto;
 import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
 import com.stcakyforge.matchpoint.model.Usuario;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -35,7 +37,7 @@ class UsuarioRepositoryTest {
         );
         this.createUsuario(newUsuario);
 
-        Optional<UsuarioResponseDto> foundedUsuario = Optional.ofNullable(usuarioRepository.findByEmail(email));
+        Optional<UserDetails> foundedUsuario = usuarioRepository.findByEmail(email);
 
         assertThat(foundedUsuario.isPresent()).isTrue();
     }
@@ -44,7 +46,7 @@ class UsuarioRepositoryTest {
     @DisplayName("Usuário não foi encontrado no Bando de Dados")
     void findByEmailCaseFalse() {
         String email = "joão@email.com";
-        Optional<UsuarioResponseDto> foundedUsuario = Optional.ofNullable(usuarioRepository.findByEmail(email));
+        Optional<UserDetails> foundedUsuario = usuarioRepository.findByEmail(email);
 
         assertThat(foundedUsuario.isEmpty()).isTrue();
     }
@@ -78,7 +80,7 @@ class UsuarioRepositoryTest {
 
     private void createUsuario(UsuarioRequestDto request) {
         Usuario newUsuario = new Usuario();
-        newUsuario.setUsername(request.username());
+        newUsuario.setNome(request.username());
         newUsuario.setEmail(request.email());
         newUsuario.setSenha(request.senha());
 

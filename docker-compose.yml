@@ -2,33 +2,36 @@ services:
   matchpoint:
     build: .
     container_name: matchpoint
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     volumes:
       - maven_cache:/root/.m2
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_matchpoint
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: manager
+      SPRING_DATASOURCE_URL: ${DB_URI}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: true
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: true
-
     depends_on:
       - db
 
   db:
     image: postgres:16
     container_name: postgres_db
+    env_file:
+      - .env
     ports:
       - "6789:5432"
     environment:
-      POSTGRES_DB: db_matchpoint
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: manager
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

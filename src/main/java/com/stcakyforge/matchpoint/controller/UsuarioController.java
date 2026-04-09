@@ -19,11 +19,6 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody @Valid UsuarioRequestDto usuarioRequestDto) {
-        return usuarioService.salvarUsuario(usuarioRequestDto);
-    }
-
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> pegarUsuarios() {
         return ResponseEntity.ok(usuarioService.listaUsuarios());

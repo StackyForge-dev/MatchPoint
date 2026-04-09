@@ -48,10 +48,12 @@ public class Jogador {
 
     private int partidasTotais;
 
+    private int cartoesAmarelos;
+
     public Jogador() {
     }
 
-    public Jogador(Long id, String nome, int pontos, int partidasJogadas, int vitorias, int empate, int derrota, int golsMarcados, int golsSofridos, int saldoGols, int partidasComoJogador1, int partidasComoJogador2, int partidasTotais, String time, Campeonato campeonato, List<Partida> partidasComoJogador1List, List<Partida> partidasComoJogador2List) {
+    public Jogador(Long id, String nome, int pontos, int partidasJogadas, int vitorias, int empate, int derrota, int golsMarcados, int golsSofridos, int saldoGols, int partidasComoJogador1, int partidasComoJogador2, int partidasTotais, String time, Campeonato campeonato, List<Partida> partidasComoJogador1List, List<Partida> partidasComoJogador2List, int cartoesAmarelos) {
         this.id = id;
         this.nome = nome;
         this.pontos = 0;
@@ -69,6 +71,7 @@ public class Jogador {
         this.campeonato = campeonato;
         this.partidasComoJogador1List = partidasComoJogador1List;
         this.partidasComoJogador2List = partidasComoJogador2List;
+        this.cartoesAmarelos = 0;
     }
 
     public Long getId() {
@@ -205,5 +208,13 @@ public class Jogador {
 
     public void setPartidasComoJogador2List(List<Partida> partidasComoJogador2List) {
         this.partidasComoJogador2List = partidasComoJogador2List;
+    }
+
+    public int getCartoesAmarelos() {
+        return cartoesAmarelos;
+    }
+
+    public void setCartoesAmarelos(int cartoesAmarelos) {
+        this.cartoesAmarelos = cartoesAmarelos;
     }
 }

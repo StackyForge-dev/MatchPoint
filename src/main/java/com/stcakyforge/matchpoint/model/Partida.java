@@ -37,10 +37,10 @@ public class Partida {
         this.id = id;
         this.jogador1 = jogador1;
         this.jogador2 = jogador2;
-        this.golsJogador1 = golsJogador1;
-        this.golsJogador2 = golsJogador2;
-        this.cartaoAmareloJogador1 = cartaoAmareloJogador1;
-        this.cartaoAmareloJogador2 = cartaoAmareloJogador2;
+        this.golsJogador1 = 0;
+        this.golsJogador2 = 0;
+        this.cartaoAmareloJogador1 = 0;
+        this.cartaoAmareloJogador2 = 0;
     }
 
     public Long getId() {

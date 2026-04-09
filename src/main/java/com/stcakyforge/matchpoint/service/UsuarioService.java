@@ -1,16 +1,16 @@
 package com.stcakyforge.matchpoint.service;
 
-import com.stcakyforge.matchpoint.config.PasswordConfig;
 import com.stcakyforge.matchpoint.dtos.request.EmailRequestDto;
+import com.stcakyforge.matchpoint.dtos.request.RegisterUserRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.SenhaRequestDto;
 import com.stcakyforge.matchpoint.dtos.request.UsuarioRequestDto;
+import com.stcakyforge.matchpoint.dtos.response.RegisterUserResponseDto;
 import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
 import com.stcakyforge.matchpoint.mapper.UsuarioMapper;
 import com.stcakyforge.matchpoint.model.Usuario;
 import com.stcakyforge.matchpoint.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,27 +21,30 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper mapper;
-    private final  PasswordConfig passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper mapper, PasswordConfig passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper mapper, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<UsuarioResponseDto> salvarUsuario(UsuarioRequestDto requestDto){
-        if (usuarioRepository.existsByEmail(requestDto.email())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public RegisterUserResponseDto registrarUsuario(RegisterUserRequestDto requestDto){
+        if (usuarioRepository.existsByEmail(requestDto.email())) {
+            throw new IllegalArgumentException("E-mail já cadastrado");
         }
 
-        String passwordEnc = passwordEncoder.passwordEncoder().encode(requestDto.senha());
+        Usuario usuario = new Usuario();
+        usuario.setNome(requestDto.username());
+        usuario.setEmail(requestDto.email());
+        usuario.setSenha(passwordEncoder.encode(requestDto.senha()));
 
-        UsuarioRequestDto user = new UsuarioRequestDto(
-                requestDto.username(),
-                requestDto.email(),
-                passwordEnc
+        usuarioRepository.save((usuario));
+
+        return new RegisterUserResponseDto(
+                usuario.getUsername(),
+                usuario.getEmail()
         );
-        return ResponseEntity.ok(mapper.toDto(usuarioRepository.save(mapper.toEntity(user))));
     }
 
     public List<UsuarioResponseDto> listaUsuarios(){
@@ -61,7 +64,7 @@ public class UsuarioService {
         Usuario oldUsuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
         oldUsuario.setId(id);
-        oldUsuario.setUsername(!Objects.equals(usuario.username(), oldUsuario.getUsername()) ? usuario.username() : oldUsuario.getUsername());
+        oldUsuario.setNome(!Objects.equals(usuario.username(), oldUsuario.getUsername()) ? usuario.username() : oldUsuario.getUsername());
 
         return mapper.toDto(usuarioRepository.save(oldUsuario));
     }
@@ -70,7 +73,7 @@ public class UsuarioService {
 
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
 
-        String passwordEnc = passwordEncoder.passwordEncoder().encode(novaSenha.novaSenha());
+        String passwordEnc = passwordEncoder.encode(novaSenha.novaSenha());
 
         usuario.setSenha(passwordEnc);
         usuarioRepository.save(usuario);
