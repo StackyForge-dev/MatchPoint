@@ -70,7 +70,6 @@ mvn clean test
   <tr>
     <td align="center">
       <a href="https://linkedin.com/in/igorryan" title="link do linkedin de Igor Alves">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGopZX3ceB7cg/profile-displayphoto-scale_200_200/B4DZkU851wHYAY-/0/1756993135190?e=1776297600&v=beta&t=2s_GT7DzO8M0cl8OGX_IVVrxP97A-COkiL1ecd8eiL0" alt="Foto do Igor Alves"/><br>
         <sub>
           <b>Igor Alves</b>
         </sub>
