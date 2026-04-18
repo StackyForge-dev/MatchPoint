@@ -27,8 +27,8 @@ A arquitetura foi pensada para ser escalável e robusta, isolando a camada de da
 - [x] **Gerenciamento de Campeonatos:** Criação de torneios e listagem de rankings gerais e específicos.
 - [x] **Controle de Jogadores:** Cadastro e cálculo automático do saldo de gols.
 - [x] **Registro de Partidas:** Sistema de anotação de gols e cartões amarelos vinculados aos jogadores.
+- [x] **Autenticação baseada em JWT:** Lógica de registro e autenticação com JWT 
 - [ ] *Em breve: Tratamento global de exceções (@ControllerAdvice).*
-- [ ] *Em breve: Autenticação baseada em JWT.*
 
 ## 🐳 Como Executar o Projeto
 
