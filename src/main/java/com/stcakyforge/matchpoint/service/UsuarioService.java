@@ -9,6 +9,7 @@ import com.stcakyforge.matchpoint.dtos.response.UsuarioResponseDto;
 import com.stcakyforge.matchpoint.mapper.UsuarioMapper;
 import com.stcakyforge.matchpoint.model.Usuario;
 import com.stcakyforge.matchpoint.repository.UsuarioRepository;
+import com.stcakyforge.matchpoint.Exception.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class UsuarioService {
 
     public RegisterUserResponseDto registrarUsuario(RegisterUserRequestDto requestDto){
         if (usuarioRepository.existsByEmail(requestDto.email())) {
-            throw new IllegalArgumentException("E-mail já cadastrado");
+            throw new ConflictException();
         }
 
         Usuario usuario = new Usuario();
@@ -52,7 +53,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDto pegarUsuarioPorId(Long id){
-        return mapper.toDto(usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados")));
+        return mapper.toDto(usuarioRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
     public void deleteUsuario(Long id){
@@ -61,7 +62,7 @@ public class UsuarioService {
 
     public UsuarioResponseDto atualizarUsernameUsuario(Long id, UsuarioRequestDto usuario){
 
-        Usuario oldUsuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
+        Usuario oldUsuario = usuarioRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         oldUsuario.setId(id);
         oldUsuario.setName(!Objects.equals(usuario.name(), oldUsuario.getUsername()) ? usuario.name() : oldUsuario.getUsername());
@@ -71,7 +72,7 @@ public class UsuarioService {
 
     public void atualizarSenha(Long id, SenhaRequestDto novaSenha){
 
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         String passwordEnc = passwordEncoder.encode(novaSenha.novaSenha());
 
@@ -81,7 +82,7 @@ public class UsuarioService {
 
     public void atualizarEmail(Long id, EmailRequestDto novoEmail){
 
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado no banco de dados"));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         usuario.setEmail(novoEmail.novoEmail());
         usuarioRepository.save(usuario);
