@@ -41,7 +41,7 @@ public class JogadorController {
     }
 
     @GetMapping("/champ/{id}")
-    public ResponseEntity<List<JogadorResponseDto>> pegarJogadoresPorCampeopnato(@PathVariable Long id) throws Throwable {
+    public ResponseEntity<List<JogadorResponseDto>> pegarJogadoresPorCampeopnato(@PathVariable Long id) {
         return ResponseEntity.ok(jogadorService.pegarJogadoresPorCampeopnato(id));
     }
 

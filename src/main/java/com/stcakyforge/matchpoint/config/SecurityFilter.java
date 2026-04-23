@@ -33,7 +33,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             UserDetails user = usuarioRepository.findByEmail(email).orElse(null);
 
             if (user != null) {
-                // Aqui nós avisamos ao Spring Security que o usuário está autenticado
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

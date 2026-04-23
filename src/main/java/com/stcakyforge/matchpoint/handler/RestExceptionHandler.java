@@ -1,5 +1,6 @@
 package com.stcakyforge.matchpoint.handler;
 
+import com.stcakyforge.matchpoint.Exception.InvalidFormatException;
 import com.stcakyforge.matchpoint.Exception.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    private ResponseEntity<RestErrorMessageHandler> userNotFoundHandler(EntityNotFoundException ex){
-        RestErrorMessageHandler restErrorMessageHandler = new RestErrorMessageHandler(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+    private ResponseEntity<RestErrorMessageHandler> userNotFoundHandler(){
+        RestErrorMessageHandler restErrorMessageHandler = new RestErrorMessageHandler(HttpStatus.NOT_FOUND, "Data not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restErrorMessageHandler);
     }
 
-
+    @ExceptionHandler(InvalidFormatException.class)
+    private ResponseEntity<RestErrorMessageHandler> invalidFormatHandler(InvalidFormatException ex){
+        RestErrorMessageHandler restErrorMessageHandler = new RestErrorMessageHandler(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessageHandler);
+    }
 }

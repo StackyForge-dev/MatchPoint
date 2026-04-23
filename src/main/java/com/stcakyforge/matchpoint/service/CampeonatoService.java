@@ -37,7 +37,7 @@ public class CampeonatoService {
 
     public List<JogadorResponseDto> rankingJogadoresPorCampeonato(Long campeonatoId) {
 
-        Campeonato campeonato = campeonatoRepository.findById(campeonatoId).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado"));
+        Campeonato campeonato = campeonatoRepository.findById(campeonatoId).orElseThrow(EntityNotFoundException::new);
 
         List<Jogador> ranking = campeonato.getJogadores().stream()
                 .sorted(Comparator.comparingInt(Jogador::getPontos).reversed())

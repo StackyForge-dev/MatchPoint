@@ -28,7 +28,7 @@ public class JogadorService {
     public JogadorResponseDto criarJogador(JogadorRequestDto request) {
         Jogador player = new Jogador();
 
-        Campeonato camp = campeonatoRepository.findById(request.idCampeonato()).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!"));
+        Campeonato camp = campeonatoRepository.findById(request.idCampeonato()).orElseThrow(EntityNotFoundException::new);
                 player.setNome(request.nome());
                 player.setTime(request.time());
                 player.setCampeonato(camp);
@@ -44,11 +44,11 @@ public class JogadorService {
     }
 
     public JogadorResponseDto pegarJogadorPorId(Long id) {
-        return mapper.toDto(jogadorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado!")));
+        return mapper.toDto(jogadorRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
     
     public int saldoGols(Long id) {
-        Jogador jogador = jogadorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado!"));
+        Jogador jogador = jogadorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         int saldoGols = jogador.getGolsMarcados() - jogador.getGolsSofridos();
 
         jogador.setSaldoGols(saldoGols);
@@ -57,9 +57,9 @@ public class JogadorService {
         return jogador.getSaldoGols();
     }
 
-    public List<JogadorResponseDto> pegarJogadoresPorCampeopnato(Long idCampeonato) throws Throwable {
+    public List<JogadorResponseDto> pegarJogadoresPorCampeopnato(Long idCampeonato) {
         if (campeonatoRepository.findById(idCampeonato).isPresent()) {
-            Campeonato campeonato = campeonatoRepository.findById(idCampeonato).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!"));
+            Campeonato campeonato = campeonatoRepository.findById(idCampeonato).orElseThrow(EntityNotFoundException::new);
 
             return mapper.toDto(campeonato.getJogadores());
         }

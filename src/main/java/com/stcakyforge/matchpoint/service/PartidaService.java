@@ -1,21 +1,17 @@
 package com.stcakyforge.matchpoint.service;
 
 
+import com.stcakyforge.matchpoint.Exception.InvalidFormatException;
 import com.stcakyforge.matchpoint.dtos.response.PartidaResponseDto;
 import com.stcakyforge.matchpoint.mapper.PartidaMapper;
-import com.stcakyforge.matchpoint.model.Campeonato;
 import com.stcakyforge.matchpoint.model.Jogador;
 import com.stcakyforge.matchpoint.model.Partida;
 import com.stcakyforge.matchpoint.repository.CampeonatoRepository;
 import com.stcakyforge.matchpoint.repository.JogadorRepository;
 import com.stcakyforge.matchpoint.repository.PartidaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,13 +30,13 @@ public class PartidaService {
         this.jogadorRepository = jogadorRepository;
     }
 
-    public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) throws AccessDeniedException {
+    public PartidaResponseDto criarPartida(Long idJogador1, Long idJogador2) throws InvalidFormatException {
         Partida newPartida = new Partida();
-        Jogador player1 = jogadorRepository.findById(idJogador1).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"));
-        Jogador player2 = jogadorRepository.findById(idJogador2).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"));
+        Jogador player1 = jogadorRepository.findById(idJogador1).orElseThrow(EntityNotFoundException::new);
+        Jogador player2 = jogadorRepository.findById(idJogador2).orElseThrow(EntityNotFoundException::new);
 
         if (!player1.getCampeonato().getId().equals(player2.getCampeonato().getId())) {
-            throw new AccessDeniedException("Não é possível criar partida de jogadores de campeonatos diferentes!");
+            throw new InvalidFormatException();
         }
         newPartida.setJogador1(player1);
         newPartida.setJogador2(player2);
@@ -53,7 +49,7 @@ public class PartidaService {
         jogadorRepository.save(player1);
         jogadorRepository.save(player2);
 
-        newPartida.setCampeonato(campeonatoRepository.findById(player1.getCampeonato().getId()).orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado")));
+        newPartida.setCampeonato(campeonatoRepository.findById(player1.getCampeonato().getId()).orElseThrow(EntityNotFoundException::new));
 
         newPartida.setGolsJogador1(0);
         newPartida.setGolsJogador2(0);
@@ -64,7 +60,7 @@ public class PartidaService {
     }
 
     public PartidaResponseDto pegarPartidaPorId(Long id) {
-        return partidaMapper.toDto(partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado")));
+        return partidaMapper.toDto(partidaRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
     public List<PartidaResponseDto> pegarPartidas () {
@@ -81,13 +77,13 @@ public class PartidaService {
     }
 
     public PartidaResponseDto fazerGol(Long id, int golsJogador1, int golsJogador2) {
-        Partida partida = partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
+        Partida partida = partidaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         partida.setGolsJogador1(golsJogador1);
         partida.setGolsJogador2(golsJogador2);
 
-        Jogador jogador1 = jogadorRepository.findById(partida.getJogador1().getId()).orElseThrow(() -> new EntityNotFoundException("Jogador inexistente"));
-        Jogador jogador2 = jogadorRepository.findById(partida.getJogador2().getId()).orElseThrow(() -> new EntityNotFoundException("Jogador inexistente"));
+        Jogador jogador1 = jogadorRepository.findById(partida.getJogador1().getId()).orElseThrow(EntityNotFoundException::new);
+        Jogador jogador2 = jogadorRepository.findById(partida.getJogador2().getId()).orElseThrow(EntityNotFoundException::new);
 
         jogador1.setGolsMarcados(jogador1.getGolsMarcados()+golsJogador1);
         jogador2.setGolsMarcados(jogador2.getGolsMarcados()+golsJogador1);
@@ -105,10 +101,10 @@ public class PartidaService {
     }
 
     public PartidaResponseDto placarCartoesAmarelos(Long id, int cartoesJogador1, int cartoesJogador2) {
-        Partida partida = partidaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Partida inexistente"));
+        Partida partida = partidaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        Jogador jogador1 = jogadorRepository.findById(partida.getJogador1().getId()).orElseThrow(() -> new EntityNotFoundException("Jogador inexistente"));
-        Jogador jogador2 = jogadorRepository.findById(partida.getJogador2().getId()).orElseThrow(() -> new EntityNotFoundException("Jogador inexistente"));
+        Jogador jogador1 = jogadorRepository.findById(partida.getJogador1().getId()).orElseThrow(EntityNotFoundException::new);
+        Jogador jogador2 = jogadorRepository.findById(partida.getJogador2().getId()).orElseThrow(EntityNotFoundException::new);
 
         partida.setCartaoAmareloJogador1(cartoesJogador1);
         partida.setCartaoAmareloJogador2(cartoesJogador2);
